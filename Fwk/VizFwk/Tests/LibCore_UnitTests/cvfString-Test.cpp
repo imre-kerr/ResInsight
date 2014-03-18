@@ -126,7 +126,7 @@ TEST(StringTest, ConstructionFromNumbers)
     int64     n2 = 12345789012345;
     float     n3 = 123.456f;
     double    n4 = 123.456;
-    cvf::uint n5 = 4294967295;
+    cvf::uint n5 = 4294967295u;
 
     // Constructors from numbers
     String s1(n1);
@@ -1359,7 +1359,7 @@ TEST(StringTest, ArgUint)
     }
 
     {
-        cvf::uint test = 4294967295;
+        cvf::uint test = 4294967295u;
         String s = String("%1").arg(test);
         EXPECT_TRUE(s == "4294967295");
     }

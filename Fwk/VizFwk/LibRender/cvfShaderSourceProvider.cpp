@@ -142,7 +142,7 @@ void ShaderSourceProvider::addFileSearchDirectory(String directory)
 //--------------------------------------------------------------------------------------------------
 bool ShaderSourceProvider::loadFile(const String& fullFileName, CharArray* fileContents)
 {
-#ifdef WIN32
+#ifdef _MSC_VER
     std::ifstream file(fullFileName.c_str());
 #else
     std::ifstream file(fullFileName.toUtf8().ptr());

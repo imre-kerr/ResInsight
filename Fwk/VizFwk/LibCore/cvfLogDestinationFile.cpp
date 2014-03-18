@@ -40,13 +40,21 @@
 #include "cvfLogEvent.h"
 
 #ifdef WIN32
-#pragma warning (push)
-#pragma warning (disable: 4668)
-#include <windows.h>
-#pragma warning (pop)
+#  ifdef _MSC_VER
+#    pragma warning (push)
+#    pragma warning (disable: 4668)
+#  endif
+#  include <windows.h>
+#  ifdef _MSC_VER
+#    pragma warning (pop)
+#  endif
 #else
-#include <cstdio>
-#include <cstdarg>
+#  include <cstdio>
+#  include <cstdarg>
+#endif
+
+#ifdef CVF_MINGW
+#  include <cstdio>
 #endif
 
 namespace cvf {
@@ -78,7 +86,7 @@ public:
     {
         CVF_ASSERT(m_filePtr == NULL);
 
-#ifdef WIN32
+#ifdef _MSC_VER
         if (_wfopen_s(&m_filePtr, m_fileName.c_str(), mode.c_str()) != 0)
         {
             m_filePtr = NULL;

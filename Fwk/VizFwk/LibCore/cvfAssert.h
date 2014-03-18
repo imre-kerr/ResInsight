@@ -76,8 +76,9 @@ private:
 
 
 // Define to trigger debug trap for use with assert macros
-// Currently only useful and in action on windows
-#ifdef WIN32
+// Currently only useful and in action on MSVC. Mingw (and other win compilers) could use DebugBreak(),
+// but then windows.h is needed, and the debug break would need to be put into a function with implementatino in the cpp. Todo ?
+#ifdef _MSC_VER
 #define CVF_DEBUGTRAP()  __debugbreak()
 #else
 #define CVF_DEBUGTRAP()  ((void)0)

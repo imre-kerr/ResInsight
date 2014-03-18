@@ -55,8 +55,8 @@ ScalarMapperRangeBased::ScalarMapperRangeBased()
     m_rangeMax(cvf::UNDEFINED_DOUBLE),
     m_decadeLevelCount(1),
     m_levelCount(8),
-    m_textureSize(2048), // Large enough, I guess and a power of two
-    m_adjustLevels(true)
+    m_adjustLevels(true),
+    m_textureSize(2048) // Large enough, I guess and a power of two
 {
     m_colors.resize(m_textureSize);
     m_colors.setAll(Color3ub::WHITE);

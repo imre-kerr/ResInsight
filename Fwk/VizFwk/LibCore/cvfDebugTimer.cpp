@@ -180,7 +180,7 @@ void DebugTimer::echoMessage(const char* format, ...)
     const int maxFormatLength = 4000;
     char temp[maxFormatLength + 1];
 
-#ifdef WIN32
+#ifdef _MSC_VER
     _vsnprintf_s(temp, maxFormatLength, format, argList);
 #else
     vsprintf(temp, format, argList);

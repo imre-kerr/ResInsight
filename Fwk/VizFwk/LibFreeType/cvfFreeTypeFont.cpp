@@ -40,7 +40,7 @@
 #include "cvfTextureImage.h"
 #include "cvfFreeTypeFont.h"
 
-#ifdef WIN32
+#if defined(WIN32) && !defined(CVF_MINGW)
 #define CVF_USE_FREETYPE_LIB
 #endif
 // Todo: Implement and check on Linux and iOS

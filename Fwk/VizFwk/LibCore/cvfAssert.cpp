@@ -44,13 +44,21 @@
 #include <string>
 
 #ifdef WIN32
-#pragma warning (push)
-#pragma warning (disable: 4668)
-#include <windows.h>
-#pragma warning (pop)
-#include <io.h>
-#include <signal.h>
-#include <fcntl.h>
+#  ifdef _MSC_VER
+#    pragma warning (push)
+#    pragma warning (disable: 4668)
+#  endif
+#  include <windows.h>
+#  ifdef _MSC_VER
+#    pragma warning (pop)
+#  endif
+#  include <io.h>
+#  include <signal.h>
+#  include <fcntl.h>
+#endif
+
+#ifdef CVF_MINGW
+#  include <cstdio>
 #endif
 
 namespace cvf {
@@ -116,7 +124,11 @@ Assert::FailAction AssertHandlerConsole::handleAssert(const char* fileName, int 
 #ifdef WIN32
     if (::IsDebuggerPresent())
     {
+#ifdef _MSC_VER
         __debugbreak();
+#else
+        DebugBreak();
+#endif
     }
 #endif
 

@@ -40,17 +40,25 @@
 #include "cvfSystem.h"
 
 #ifdef WIN32
-#pragma warning (push)
-#pragma warning (disable: 4668)
-#include <windows.h>
-#pragma warning (pop)
+#  ifdef _MSC_VER
+#    pragma warning (push)
+#    pragma warning (disable: 4668)
+#  endif
+#  include <windows.h>
+#  ifdef _MSC_VER
+#    pragma warning (pop)
+#  endif
 #else
-#include <cstdio>
-#include <cstdarg>
+#  include <cstdio>
+#  include <cstdarg>
 #endif
 
 #ifdef CVF_ANDROID
 #include <android/log.h>
+#endif
+
+#ifdef CVF_MINGW
+#include <cstdio>
 #endif
 
 namespace cvf {
@@ -88,7 +96,7 @@ void Trace::show(const char* format, ...)
     const int maxFormatLength = 4000;
     char temp[maxFormatLength + 1];
 
-#ifdef WIN32
+#ifdef _MSC_VER
     _vsnprintf_s(temp, maxFormatLength, format, argList);
 #elif defined(CVF_ANDROID)
     __android_log_print(ANDROID_LOG_DEBUG, "CVF_TAG", format, argList);

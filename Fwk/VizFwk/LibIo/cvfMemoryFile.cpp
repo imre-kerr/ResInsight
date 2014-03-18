@@ -80,7 +80,7 @@ bool MemoryFile::load(const cvf::String& filename)
 
     if (filename.isEmpty()) return false;
 
-#ifdef WIN32
+#ifdef _MSC_VER
     // Open File;
     FILE* file = NULL;
     errno_t err = _wfopen_s(&file, filename.c_str(), L"rb");

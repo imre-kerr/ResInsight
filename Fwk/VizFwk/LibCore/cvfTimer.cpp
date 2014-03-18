@@ -39,10 +39,14 @@
 #include "cvfTimer.h"
 
 #ifdef WIN32
-#pragma warning (push)
-#pragma warning (disable: 4668)
-#include <windows.h>
-#pragma warning (pop)
+#  ifdef _MSC_VER
+#    pragma warning (push)
+#    pragma warning (disable: 4668)
+#  endif
+#  include <windows.h>
+#  ifdef _MSC_VER
+#    pragma warning (pop)
+#  endif
 #endif
 
 #if defined(CVF_LINUX) || defined(CVF_ANDROID)

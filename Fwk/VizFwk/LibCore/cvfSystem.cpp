@@ -85,7 +85,7 @@ bool System::isBigEndian()
 //--------------------------------------------------------------------------------------------------
 bool System::memcpy(void* dst, size_t dstSizeInBytes, const void* src, size_t numBytesToCopy)
 {
-#if WIN32
+#ifdef _MSC_VER
 
     // Debug version asserts
     errno_t err = memcpy_s(dst, dstSizeInBytes, src, numBytesToCopy);
@@ -126,7 +126,7 @@ bool System::memcpy(void* dst, size_t dstSizeInBytes, const void* src, size_t nu
 //--------------------------------------------------------------------------------------------------
 bool System::strcpy(char* strDestination, size_t maxNumElementsInDestination, const char* strSource)
 {
-#ifdef WIN32
+#ifdef _MSC_VER
 
     // Debug version asserts
     // Note that on windows the debug versions functions first fills the buffer with 0xFD
@@ -160,7 +160,7 @@ bool System::strcpy(char* strDestination, size_t maxNumElementsInDestination, co
 //--------------------------------------------------------------------------------------------------
 bool System::strcat(char* strDestination, size_t maxNumElementsInDestination, const char* strSource)
 {
-#ifdef WIN32
+#ifdef _MSC_VER
 
     errno_t err = strcat_s(strDestination, maxNumElementsInDestination, strSource);
     if (err == 0)
@@ -220,7 +220,7 @@ int System::sprintf(char* buffer, size_t maxNumElementsInBuffer, const char* for
     va_list argList;
     va_start(argList, format);
 
-#ifdef WIN32
+#ifdef _MSC_VER
 
     int numWritten = vsnprintf_s(buffer, maxNumElementsInBuffer*sizeof(char), maxNumElementsInBuffer - 1, format, argList);
 
@@ -269,8 +269,10 @@ int System::swprintf(wchar_t* buffer, size_t maxNumElementsInBuffer, const wchar
     va_list argList;
     va_start(argList, format);
 
-#ifdef WIN32
+#ifdef _MSC_VER
     int numWritten = _vsnwprintf_s(buffer, maxNumElementsInBuffer, maxNumElementsInBuffer - 1, format, argList);
+#elif defined(CVF_MINGW)
+    int numWritten = _vsnwprintf(buffer, maxNumElementsInBuffer, format, argList);
 #else
     int numWritten = vswprintf(buffer, maxNumElementsInBuffer, format, argList);
 #endif

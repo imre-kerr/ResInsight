@@ -55,7 +55,7 @@ namespace cvf {
 //--------------------------------------------------------------------------------------------------
 FILE* File::fopen(const String& fileName, const String& mode)
 {
-#ifdef WIN32
+#ifdef _MSC_VER
 
     FILE* filePtr = NULL;
     if (_wfopen_s(&filePtr, fileName.c_str(), mode.c_str()) != 0)

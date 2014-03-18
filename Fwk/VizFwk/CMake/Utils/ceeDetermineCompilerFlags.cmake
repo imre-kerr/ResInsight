@@ -6,6 +6,8 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 	add_definitions(-DCVF_LINUX)
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	add_definitions(-DCVF_OSX)
+elseif (${MINGW})
+        add_definitions(-DCVF_MINGW)
 endif()
 
 

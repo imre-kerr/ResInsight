@@ -40,7 +40,7 @@
 
 #include "cvfuImageJpeg.h"
 
-#ifdef WIN32
+#ifdef _MSC_VER
 #pragma warning (disable: 4061 4100 4127 4242 4244 4267 4365 4668 4996)
 #endif
 

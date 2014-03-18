@@ -65,7 +65,7 @@ bool StructGridImport::import(const cvf::String& filename, DataType dataType, ui
     size_t numValues = countI * countJ * countK;
     dataset->resize(numValues);
 
-#ifdef WIN32
+#ifdef _MSC_VER
     FILE* stream = NULL;
     errno_t err = fopen_s(&stream, filename.toUtf8().ptr(), "rb");
     if (err != 0 || !stream) return false;

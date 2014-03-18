@@ -44,7 +44,7 @@
 //  Global include file with definitions useful for all library files
 
 // Disable some annoying warnings so we can compile with warning level Wall
-#ifdef WIN32
+#ifdef _MSC_VER
 // 4512  'class' : assignment operator could not be generated : Due to problems with classes with reference member variables (e.g. VertexCompactor)
 // 4514  unreferenced inline/local function has been removed
 // 4625  copy constructor could not be generated because a base class copy constructor is inaccessible
@@ -68,7 +68,7 @@
 #endif
 
 
-#if defined(CVF_LINUX) || defined(CVF_IOS) || defined(CVF_OSX) || defined(CVF_ANDROID)
+#if defined(CVF_LINUX) || defined(CVF_IOS) || defined(CVF_OSX) || defined(CVF_ANDROID) || defined(CVF_MINGW)
 // Used by int64_t on *nix below
 #include <stdint.h>     
 #endif
@@ -104,9 +104,10 @@ typedef unsigned short   ushort;
 typedef unsigned int     uint;
 
 // 64bit integer support via the int64 type
-#ifdef WIN32
+
+#if defined(WIN32) && !defined(CVF_MINGW)
 typedef __int64 int64;  
-#elif defined(CVF_LINUX) || defined(CVF_IOS) || defined(CVF_OSX) || defined(CVF_ANDROID)
+#elif defined(CVF_LINUX) || defined(CVF_IOS) || defined(CVF_OSX) || defined(CVF_ANDROID) || defined(CVF_MINGW)
 typedef int64_t int64;  
 #endif 
 

@@ -49,7 +49,7 @@
 
 using namespace cvf;
 
-#ifdef WIN32
+#ifdef _MSC_VER
 // We intentionally divide by 0 so nuke the warning
 #pragma warning (disable: 4723)
 #endif
@@ -208,14 +208,14 @@ TEST(MathTest, IsPow2)
     EXPECT_TRUE(Math::isPow2(1));
     EXPECT_TRUE(Math::isPow2(2));
     EXPECT_TRUE(Math::isPow2(1024));
-    EXPECT_TRUE(Math::isPow2(2147483648));
+    EXPECT_TRUE(Math::isPow2(2147483648u));
 
     EXPECT_FALSE(Math::isPow2(0));
     EXPECT_FALSE(Math::isPow2(3));
     EXPECT_FALSE(Math::isPow2(1023));
-    EXPECT_FALSE(Math::isPow2(2147483648 - 1));
-    EXPECT_FALSE(Math::isPow2(2147483648 + 1));
-    EXPECT_FALSE(Math::isPow2(4294967295));
+    EXPECT_FALSE(Math::isPow2(2147483648u - 1));
+    EXPECT_FALSE(Math::isPow2(2147483648u + 1));
+    EXPECT_FALSE(Math::isPow2(4294967295u));
 }
 
 
@@ -233,11 +233,11 @@ TEST(MathTest, RoundUpPow2)
     EXPECT_EQ( 64, Math::roundUpPow2(64));
     EXPECT_EQ(128, Math::roundUpPow2(65));
 
-    EXPECT_EQ(2147483648, Math::roundUpPow2(2147483648 - 1));
-    EXPECT_EQ(2147483648, Math::roundUpPow2(2147483648));
+    EXPECT_EQ(2147483648u, Math::roundUpPow2(2147483648u - 1));
+    EXPECT_EQ(2147483648u, Math::roundUpPow2(2147483648u));
 
-    EXPECT_EQ(0, Math::roundUpPow2(2147483648 + 1));
-    EXPECT_EQ(0, Math::roundUpPow2(4294967295));
+    EXPECT_EQ(0, Math::roundUpPow2(2147483648u + 1));
+    EXPECT_EQ(0, Math::roundUpPow2(4294967295u));
 }
 
 

@@ -38,7 +38,7 @@
 #include "cvfBase.h"
 #include "cvfBase64.h"
 
-#ifdef WIN32
+#ifdef _MSC_VER
 #pragma warning (disable: 4242 4244 4267 4365)
 #endif
 

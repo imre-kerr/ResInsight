@@ -780,7 +780,7 @@ const XmlElement* XmlDocumentImpl::getRootElement(const String& rootName) const
 //--------------------------------------------------------------------------------------------------
 bool XmlDocumentImpl::loadFile(const String& fileName)
 {
-#ifdef WIN32
+#ifdef _MSC_VER
     FILE* filePtr = NULL;
     if (_wfopen_s(&filePtr, fileName.c_str(), L"rb") != 0)
     {
@@ -856,7 +856,7 @@ bool XmlDocumentImpl::setFromTiXmlDoc(const TiXmlDocument& doc)
 //--------------------------------------------------------------------------------------------------
 bool XmlDocumentImpl::saveFile(const String& fileName)
 {
-#ifdef WIN32
+#ifdef _MSC_VER
     FILE* filePtr = NULL;
     if (_wfopen_s(&filePtr, fileName.c_str(), L"w") != 0)
     {
@@ -885,7 +885,7 @@ bool XmlDocumentImpl::saveCompactFile(const String& fileName)
 {
     std::ofstream myfile;
 
-#ifdef WIN32
+#ifdef _MSC_VER
     myfile.open(fileName.c_str());
 #else
     myfile.open(fileName.toUtf8().ptr());
