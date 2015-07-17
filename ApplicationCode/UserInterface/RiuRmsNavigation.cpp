@@ -25,6 +25,7 @@
 #include "cvfViewport.h"
 #include "cvfHitItemCollection.h"
 #include "cvfRay.h"
+#include "RiuMainWindow.h"
 
 #include <QInputEvent>
 #include <QHBoxLayout>
@@ -189,6 +190,15 @@ bool RiuRmsNavigation::handleInputEvent(QInputEvent* inputEvent)
 
                 }
                 isEventHandled = true;
+            }
+        }
+        break;
+    case QEvent::KeyRelease:
+        {
+            QKeyEvent *ke = static_cast<QKeyEvent*>(inputEvent);
+            if (ke->key() == Qt::Key_Escape && RiuMainWindow::instance()->isMaximized())
+            {
+                RiuMainWindow::instance()->exitFullscreen();
             }
         }
         break;

@@ -3,17 +3,17 @@
 //  Copyright (C) 2011-     Statoil ASA
 //  Copyright (C) 2013-     Ceetron Solutions AS
 //  Copyright (C) 2011-2012 Ceetron AS
-// 
+//
 //  ResInsight is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-// 
+//
 //  ResInsight is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or
 //  FITNESS FOR A PARTICULAR PURPOSE.
-// 
-//  See the GNU General Public License at <http://www.gnu.org/licenses/gpl.html> 
+//
+//  See the GNU General Public License at <http://www.gnu.org/licenses/gpl.html>
 //  for more details.
 //
 /////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ namespace ssihub
 
 //==================================================================================================
 //
-// 
+//
 //
 //==================================================================================================
 class RiuMainWindow : public QMainWindow
@@ -72,7 +72,7 @@ class RiuMainWindow : public QMainWindow
 public:
     RiuMainWindow();
     static RiuMainWindow* instance();
-    
+
     void		    initializeGuiNewProjectLoaded();
     void		    cleanupGuiBeforeProjectClose();
 
@@ -101,8 +101,10 @@ public:
 
     void            appendActionsContextMenuForPdmObject(caf::PdmObject* pdmObject, QMenu* menu);
     void            refreshDrawStyleActions();
-    
+
     void            setExpanded(const caf::PdmObject* pdmObject, bool expanded);
+
+    void            exitFullscreen();
 
 protected:
     virtual void	closeEvent(QCloseEvent* event);
@@ -119,7 +121,7 @@ private:
     void            updateRecentFileActions();
     void            addRecentFiles(const QString& file);
     void            removeRecentFiles(const QString& file);
-    
+
     QMdiSubWindow*  findMdiSubWindow(RiuViewer* viewer);
 
     void            storeTreeViewState();
@@ -127,7 +129,7 @@ private:
 
 private:
     static RiuMainWindow*    sm_mainWindowInstance;
-    
+
     QByteArray			    m_initialDockAndToolbarLayout;	// Initial dock window and toolbar layout, used to reset GUI
 
 private:
@@ -164,6 +166,7 @@ private:
     QAction*		    m_viewFromAbove;
     QAction*		    m_viewFromBelow;
     QAction*		    m_zoomAll;
+    QAction*            m_fullScreen;
 
     // Mock actions
     QAction*		    m_mockModelAction;
@@ -199,7 +202,7 @@ private:
     RiuViewer*           m_mainViewer;
     RiuResultInfoPanel*  m_resultInfoPanel;
     RiuProcessMonitor*   m_processMonitor;
-    
+
     QMenu*              m_windowMenu;
 
 
@@ -249,7 +252,7 @@ private slots:
     // Debug slots
     void    slotUseShaders(bool enable);
     void    slotShowPerformanceInfo(bool enable);
-    
+
     void    slotSnapshotToFile();
     void    slotSnapshotToClipboard();
     void    slotSnapshotAllViewsToFile();
@@ -281,9 +284,12 @@ private slots:
     void    slotSetCurrentFrame(int frameIndex);
     void    slotFramerateChanged(double frameRate);
 
+    void    slotFullScreen();
+
     // Pdm System :
 public:
     void setPdmRoot(caf::PdmObject* pdmRoot);
+
 private:
     RimUiTreeView*              m_treeView;
     RimUiTreeModelPdm*          m_treeModelPdm;
@@ -304,4 +310,6 @@ private:
 
     std::vector<QPointer<QDockWidget> > additionalProjectTrees;
     std::vector<QPointer<QDockWidget> > additionalPropertyEditors;
+
+    bool                        m_isMaximized;
 };
