@@ -69,6 +69,11 @@ public: // Pdm Fields
 
     caf::PdmField<RifReaderSettings*> readerSettings;
 
+    caf::PdmField<int>      totalScreenWidth;
+    caf::PdmField<int>      totalScreenHeight;
+    caf::PdmField<int>      subScreenXOffset;
+    caf::PdmField<int>      subScreenYOffset;
+
 protected:
     virtual void defineEditorAttribute(const caf::PdmFieldHandle* field, QString uiConfigName, caf::PdmUiEditorAttribute* attribute);
 

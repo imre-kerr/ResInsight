@@ -72,6 +72,11 @@ RiaPreferences::RiaPreferences(void)
 
     readerSettings = new RifReaderSettings;
     CAF_PDM_InitFieldNoDefault(&readerSettings,        "readerSettings", "Reader settings", "", "", "");
+
+    CAF_PDM_InitField(&totalScreenWidth,                "totalScreenWidth", 1920, "Total screen width", "", "", ""); //TODO: Read from screen resolution? Does that work?
+    CAF_PDM_InitField(&totalScreenHeight,               "totalScreenHeight", 1080, "Total screen height", "", "", "");
+    CAF_PDM_InitField(&subScreenXOffset,                "subScreenXOffset", 0, "Subscreen X offset", "", "", "");
+    CAF_PDM_InitField(&subScreenYOffset,                "subScreenYOffset", 0, "Subscreen Y offset", "", "", "");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -144,6 +149,12 @@ void RiaPreferences::defineUiOrdering(QString uiConfigName, caf::PdmUiOrdering& 
     {
         readerSettingsGroup->add(readerSettingsFields[i]);
     }
+
+    caf::PdmUiGroup* multiScreenGroup = uiOrdering.addNewGroup("Multi-screen settings");
+    multiScreenGroup->add(&totalScreenWidth);
+    multiScreenGroup->add(&totalScreenHeight);
+    multiScreenGroup->add(&subScreenXOffset);
+    multiScreenGroup->add(&subScreenYOffset);
 }
 
 //--------------------------------------------------------------------------------------------------
