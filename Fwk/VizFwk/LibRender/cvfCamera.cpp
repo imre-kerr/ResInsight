@@ -550,6 +550,49 @@ const Viewport* Camera::viewport() const
     return m_viewport.p(); 
 }
 
+//--------------------------------------------------------------------------------------------------
+/// Specify the zoom region for multi-screen, and update the projection matrix.
+///
+/// This method updates the projection matrix, as this is depending on the zoom region dimensions.
+//--------------------------------------------------------------------------------------------------
+void Camera::setZoomRegion(int x, int y, uint totalWidth, uint totalHeight)
+{
+    m_totalWidth = totalWidth;
+    m_totalHeight = totalHeight;
+
+    double d_x = static_cast<double>(x);
+    double d_y = static_cast<double>(y);
+    double d_width = static_cast<double>(m_viewport->width());
+    double d_height = static_cast<double>(m_viewport->height());
+    double d_totalWidth = static_cast<double>(m_totalWidth);
+    double d_totalHeight = static_cast<double>(m_totalHeight);
+
+    Vector3<double> translate(1.0d - (2*d_x + d_width)/d_totalWidth,
+                              (2*d_y + d_height)/d_totalHeight - 1.0d,
+                              0.0d);
+    Vector3<double> scale(d_totalWidth/d_width, d_totalHeight/d_height, 1.0d);
+
+    m_cachedZoomMatrix = Matrix4<double>::fromScaling(scale) * Matrix4<double>::fromTranslation(translate);
+
+    // Update projection:
+    if (m_projectionType == PERSPECTIVE)
+    {
+        setProjectionAsPerspective(m_fieldOfViewYDeg, m_nearPlane, m_farPlane);
+    }
+    else if (m_projectionType == ORTHO)
+    {
+        setProjectionAsOrtho(m_frontPlaneFrustumHeight, m_nearPlane, m_farPlane);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+/// Get the aspect ratio of the multi-screen
+//--------------------------------------------------------------------------------------------------
+double Camera::totalAspectRatio() const
+{
+    return static_cast<double>(m_totalWidth)/static_cast<double>(m_totalHeight);
+}
+
 
 //--------------------------------------------------------------------------------------------------
 /// Create a Ray from window coordinates

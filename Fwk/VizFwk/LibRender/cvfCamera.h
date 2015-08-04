@@ -89,7 +89,8 @@ public:
 
     const Mat4d&    viewMatrix() const; 
     const Mat4d&    invertedViewMatrix() const; 
-    const Mat4d&    projectionMatrix() const; 
+    const Mat4d&    projectionMatrix() const;
+    const Mat4d&    zoomMatrix() const;
 
     double          fieldOfViewYDeg() const;
     double          nearPlane() const;
@@ -103,6 +104,9 @@ public:
     void            setViewport(int x, int y, uint width, uint height);
     Viewport*       viewport();
     const Viewport* viewport() const;
+
+    void            setZoomRegion(int x, int y, uint width, uint height, uint totalWidth, uint totalHeight);
+    double          totalAspectRatio() const;
 
     ref<Ray>        rayFromWindowCoordinates(int x, int y) const;
     ref<Plane>      planeFromLineWindowCoordinates(Vec2i coordStart, Vec2i coordEnd) const;
@@ -132,12 +136,18 @@ private:
     Mat4d           m_cachedInvertedViewMatrix;         // Cached inverted version of the m_viewMatrix
     Mat4d           m_projectionMatrix;
     Mat4d           m_cachedProjectionMultViewMatrix;   // Caching projMat*viewMat, as this is used in many tight loops (eps. computeBoundingBoxPixelSize)
+    Mat4d           m_cachedZoomMatrix;
     ProjectionType  m_projectionType;
 
     double          m_fieldOfViewYDeg;                  // Stored for perspective projection
     double          m_frontPlaneFrustumHeight;          // Height of view frustum in the front plane
     double          m_nearPlane;
     double          m_farPlane;
+
+    int             m_zoomRegionX;
+    int             m_zoomRegionY;
+    uint            m_totalWidth;
+    uint            m_totalHeight;
 
     ref<Viewport>   m_viewport;
     double          m_cachedFrontPlanePixelHeight;      // Height of a pixel in the front clipping plane given in world coordinates
