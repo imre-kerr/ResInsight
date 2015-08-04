@@ -1355,6 +1355,21 @@ void RiuMainWindow::slotFullScreen()
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
+void RiuMainWindow::exitFullscreen()
+{
+    if (RiaApplication::instance()->activeReservoirView() &&  RiaApplication::instance()->activeReservoirView()->viewer())
+    {
+        RiuViewer *viewer = RiaApplication::instance()->activeReservoirView()->viewer();
+        //viewer->mainCamera()->setIsFullscreen(false);
+        viewer->setParent(this);
+        setCentralWidget(viewer);
+        m_isMaximized = false;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+///
+//--------------------------------------------------------------------------------------------------
 void RiuMainWindow::slotSubWindowActivated(QMdiSubWindow* subWindow)
 {
     RimProject * proj = RiaApplication::instance()->project();
@@ -2156,21 +2171,6 @@ void RiuMainWindow::setExpanded(const caf::PdmObject* pdmObject, bool expanded)
     if (m_treeView && mi.isValid())
     {
         m_treeView->setExpanded(mi, expanded);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-///
-//--------------------------------------------------------------------------------------------------
-void RiuMainWindow::exitFullscreen()
-{
-    if (RiaApplication::instance()->activeReservoirView() &&  RiaApplication::instance()->activeReservoirView()->viewer())
-    {
-        RiuViewer *viewer = RiaApplication::instance()->activeReservoirView()->viewer();
-        viewer->mainCamera()->setIsFullscreen(true);
-        viewer->setParent(this);
-        setCentralWidget(viewer);
-        m_isMaximized = false;
     }
 }
 

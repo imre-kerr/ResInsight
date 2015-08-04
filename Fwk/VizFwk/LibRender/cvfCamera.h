@@ -105,7 +105,7 @@ public:
     Viewport*       viewport();
     const Viewport* viewport() const;
 
-    void            setZoomRegion(int x, int y, uint totalWidth, uint totalHeight);
+    void            setZoomRegion(int x, int y, uint width, uint height, uint totalWidth, uint totalHeight);
     double          totalAspectRatio() const;
 
     void            setIsFullscreen(bool isFullscreen);
@@ -138,7 +138,7 @@ private:
     Mat4d           m_cachedInvertedViewMatrix;         // Cached inverted version of the m_viewMatrix
     Mat4d           m_projectionMatrix;
     Mat4d           m_cachedProjectionMultViewMatrix;   // Caching projMat*viewMat, as this is used in many tight loops (eps. computeBoundingBoxPixelSize)
-    Mat4d           m_cachedZoomMatrix;
+    Mat4d           m_zoomMatrix;
     ProjectionType  m_projectionType;
 
     double          m_fieldOfViewYDeg;                  // Stored for perspective projection

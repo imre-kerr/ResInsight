@@ -214,6 +214,11 @@ void Camera::setProjectionAsPerspective(double fieldOfViewYDeg, double nearPlane
 
     m_projectionMatrix = createPerspectiveMatrix(Math::toRadians(m_fieldOfViewYDeg), aspectRatio(), m_nearPlane, m_farPlane);
 
+    if (m_isFullScreen)
+    {
+        m_projectionMatrix = m_zoomMatrix*m_projectionMatrix;
+    }
+
     updateCachedValues();
 }
 
@@ -236,6 +241,11 @@ void Camera::setProjectionAsOrtho(double height, double nearPlane, double farPla
 
     m_projectionMatrix = createOrthoMatrix(-width/2.0, width/2.0, -height/2.0, height/2.0, m_nearPlane, m_farPlane);
 
+    if (m_isFullScreen)
+    {
+        m_projectionMatrix = m_zoomMatrix*m_projectionMatrix;
+    }
+
     updateCachedValues();
 }
 
@@ -255,6 +265,11 @@ void Camera::setProjectionAsUnitOrtho()
 
     m_projectionMatrix = createOrthoMatrix(0.0, 1.0, 0.0, 1.0, m_nearPlane, m_farPlane);
 
+    if (m_isFullScreen)
+    {
+        m_projectionMatrix = m_zoomMatrix*m_projectionMatrix;
+    }
+
     updateCachedValues();
 }
 
@@ -273,6 +288,11 @@ void Camera::setProjectionAsPixelExact2D()
     m_farPlane = 1.0;
 
     m_projectionMatrix = createOrthoMatrix(0, m_viewport->width(), 0, m_viewport->height(), m_nearPlane, m_farPlane);
+
+    if (m_isFullScreen)
+    {
+        m_projectionMatrix = m_zoomMatrix*m_projectionMatrix;
+    }
 
     updateCachedValues();
 }
@@ -501,8 +521,14 @@ double Camera::farPlane()const
 double Camera::aspectRatio() const 
 {
     CVF_ASSERT(m_viewport.notNull());
-
-    return viewport()->aspectRatio();
+    if (m_isFullScreen)
+    {
+        return totalAspectRatio();
+    }
+    else
+    {
+        return viewport()->aspectRatio();
+    }
 }
 
 
@@ -555,15 +581,15 @@ const Viewport* Camera::viewport() const
 ///
 /// This method updates the projection matrix, as this is depending on the zoom region dimensions.
 //--------------------------------------------------------------------------------------------------
-void Camera::setZoomRegion(int x, int y, uint totalWidth, uint totalHeight)
+void Camera::setZoomRegion(int x, int y, uint width, uint height, uint totalWidth, uint totalHeight)
 {
     m_totalWidth = totalWidth;
     m_totalHeight = totalHeight;
 
     double d_x = static_cast<double>(x);
     double d_y = static_cast<double>(y);
-    double d_width = static_cast<double>(m_viewport->width());
-    double d_height = static_cast<double>(m_viewport->height());
+    double d_width = static_cast<double>(width);
+    double d_height = static_cast<double>(height);
     double d_totalWidth = static_cast<double>(m_totalWidth);
     double d_totalHeight = static_cast<double>(m_totalHeight);
 
@@ -572,7 +598,7 @@ void Camera::setZoomRegion(int x, int y, uint totalWidth, uint totalHeight)
                               0.0d);
     Vector3<double> scale(d_totalWidth/d_width, d_totalHeight/d_height, 1.0d);
 
-    m_cachedZoomMatrix = Matrix4<double>::fromScaling(scale) * Matrix4<double>::fromTranslation(translate);
+    m_zoomMatrix = Matrix4<double>::fromScaling(scale) * Matrix4<double>::fromTranslation(translate);
 
     // Update projection:
     if (m_projectionType == PERSPECTIVE)

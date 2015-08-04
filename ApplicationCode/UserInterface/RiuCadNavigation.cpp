@@ -182,7 +182,6 @@ bool RiuCadNavigation::handleInputEvent(QInputEvent* inputEvent)
             QKeyEvent *ke = static_cast<QKeyEvent*>(inputEvent);
             if (ke->key() == Qt::Key_Escape)
             {
-                qDebug("Key released!");
                 RiuMainWindow::instance()->exitFullscreen();
             }
         }

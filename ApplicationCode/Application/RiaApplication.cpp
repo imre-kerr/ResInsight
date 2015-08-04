@@ -1381,6 +1381,8 @@ void RiaApplication::applyPreferences()
         m_activeReservoirView->viewer()->enablePerfInfoHud(m_preferences->showHud());
         m_activeReservoirView->viewer()->mainCamera()->setZoomRegion(m_preferences->subScreenXOffset,
                                                                      m_preferences->subScreenYOffset,
+                                                                     desktop()->width(),
+                                                                     desktop()->height(),
                                                                      m_preferences->totalScreenWidth,
                                                                      m_preferences->totalScreenHeight);
     }
