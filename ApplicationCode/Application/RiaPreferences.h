@@ -74,6 +74,9 @@ public: // Pdm Fields
     caf::PdmField<int>      subScreenXOffset;
     caf::PdmField<int>      subScreenYOffset;
 
+    caf::PdmField<int>      tcpPort;
+    caf::PdmField< std::vector<QString> > connectTo;
+
 protected:
     virtual void defineEditorAttribute(const caf::PdmFieldHandle* field, QString uiConfigName, caf::PdmUiEditorAttribute* attribute);
 

@@ -1402,7 +1402,6 @@ void RiaApplication::applyPreferences()
         RimUiTreeModelPdm* treeModel = RiuMainWindow::instance()->uiPdmModel();
         if (treeModel) treeModel->updateUiSubTree(this->project()->scriptCollection());
     }
-
 }
 
 //--------------------------------------------------------------------------------------------------

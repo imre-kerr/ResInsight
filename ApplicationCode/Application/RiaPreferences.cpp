@@ -73,10 +73,13 @@ RiaPreferences::RiaPreferences(void)
     readerSettings = new RifReaderSettings;
     CAF_PDM_InitFieldNoDefault(&readerSettings,        "readerSettings", "Reader settings", "", "", "");
 
-    CAF_PDM_InitField(&totalScreenWidth,                "totalScreenWidth", 1920, "Total screen width", "", "", ""); //TODO: Read from screen resolution? Does that work?
+    CAF_PDM_InitField(&totalScreenWidth,                "totalScreenWidth", 1920, "Total screen width", "", "", "");
     CAF_PDM_InitField(&totalScreenHeight,               "totalScreenHeight", 1080, "Total screen height", "", "", "");
     CAF_PDM_InitField(&subScreenXOffset,                "subScreenXOffset", 0, "Subscreen X offset", "", "", "");
     CAF_PDM_InitField(&subScreenYOffset,                "subScreenYOffset", 0, "Subscreen Y offset", "", "", "");
+
+    CAF_PDM_InitField(&tcpPort,                         "tcpPort", 3310, "TCP Listening Port", "", "", "");
+    CAF_PDM_InitFieldNoDefault(&connectTo,              "connectTo", "Display nodes", "", "", "");
 }
 
 //--------------------------------------------------------------------------------------------------
