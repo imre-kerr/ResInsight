@@ -593,6 +593,13 @@ double Camera::totalAspectRatio() const
     return static_cast<double>(m_totalWidth)/static_cast<double>(m_totalHeight);
 }
 
+//--------------------------------------------------------------------------------------------------
+/// Specify whether we are in fullscreen mode
+//--------------------------------------------------------------------------------------------------
+void Camera::setIsFullscreen(bool isFullscreen)
+{
+    m_isFullScreen = isFullscreen;
+}
 
 //--------------------------------------------------------------------------------------------------
 /// Create a Ray from window coordinates

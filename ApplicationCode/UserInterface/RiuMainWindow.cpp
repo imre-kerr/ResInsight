@@ -1343,8 +1343,8 @@ void RiuMainWindow::slotFullScreen()
     if (RiaApplication::instance()->activeReservoirView() &&  RiaApplication::instance()->activeReservoirView()->viewer())
     {
         RiuViewer *viewer = RiaApplication::instance()->activeReservoirView()->viewer();
-        qDebug("Maximize");
         m_isMaximized = true;
+        viewer->mainCamera()->setIsFullscreen(true);
         viewer->setParent(NULL);
         viewer->setWindowFlags(viewer->windowFlags() | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint | Qt::WindowMaximizeButtonHint | Qt::WindowCloseButtonHint);
         viewer->setWindowState(viewer->windowState() | Qt::WindowFullScreen);
@@ -2167,7 +2167,7 @@ void RiuMainWindow::exitFullscreen()
     if (RiaApplication::instance()->activeReservoirView() &&  RiaApplication::instance()->activeReservoirView()->viewer())
     {
         RiuViewer *viewer = RiaApplication::instance()->activeReservoirView()->viewer();
-        qDebug("Parent");
+        viewer->mainCamera()->setIsFullscreen(true);
         viewer->setParent(this);
         setCentralWidget(viewer);
         m_isMaximized = false;

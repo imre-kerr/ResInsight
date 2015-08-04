@@ -105,8 +105,10 @@ public:
     Viewport*       viewport();
     const Viewport* viewport() const;
 
-    void            setZoomRegion(int x, int y, uint width, uint height, uint totalWidth, uint totalHeight);
+    void            setZoomRegion(int x, int y, uint totalWidth, uint totalHeight);
     double          totalAspectRatio() const;
+
+    void            setIsFullscreen(bool isFullscreen);
 
     ref<Ray>        rayFromWindowCoordinates(int x, int y) const;
     ref<Plane>      planeFromLineWindowCoordinates(Vec2i coordStart, Vec2i coordEnd) const;
@@ -148,6 +150,8 @@ private:
     int             m_zoomRegionY;
     uint            m_totalWidth;
     uint            m_totalHeight;
+
+    bool            m_isFullScreen;
 
     ref<Viewport>   m_viewport;
     double          m_cachedFrontPlanePixelHeight;      // Height of a pixel in the front clipping plane given in world coordinates
