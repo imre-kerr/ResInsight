@@ -24,6 +24,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/GeoMech/OdbReader
     ${CMAKE_CURRENT_SOURCE_DIR}/GeoMech/GeoMechDataModel
     ${CMAKE_CURRENT_SOURCE_DIR}/GeoMech/GeoMechVisualization
+    ${CMAKE_CURRENT_SOURCE_DIR}/Network
 
     ${CMAKE_BINARY_DIR}/Generated
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -36,10 +37,10 @@ include_directories(
 # Use all h files in the subdirectories to make them available in the project
 file( GLOB_RECURSE HEADER_FILES *.h )
 
-set( APPLICATION_FILES 
+set( APPLICATION_FILES
     RiaMain.cpp
     RiaStdInclude.cpp
-        
+
     Application/RiaApplication.cpp
     Application/RiaPreferences.cpp
     Application/RiaImageFileCompare.cpp
@@ -75,11 +76,17 @@ set( SOCKET_INTERFACE_FILES
     SocketInterface/RiaSocketDataTransfer.cpp
 )
 
+set( NETWORK_FILES
+    Network/RiaNetServer.cpp
+    Network/RiaNetClient.cpp
+)
+
 
 list( APPEND CPP_SOURCES
      ${APPLICATION_FILES}
      ${USER_INTERFACE_FILES}
      ${SOCKET_INTERFACE_FILES}
+     ${NETWORK_FILES}
 )
 
 
@@ -112,7 +119,7 @@ add_subdirectory(ResultStatisticsCache)
 # Odb api
 #
 set(RESINSIGHT_ODB_API_DIR "" CACHE PATH "Path to the ODB api from Simulia")
-if(NOT ${RESINSIGHT_ODB_API_DIR} EQUAL "") 
+if(NOT ${RESINSIGHT_ODB_API_DIR} EQUAL "")
 	add_definitions(-DUSE_ODB_API)
 	add_subdirectory(GeoMech/OdbReader)
 	SET(RESINSIGHT_USE_ODB_API 1)
@@ -127,11 +134,11 @@ add_subdirectory(GeoMech/GeoMechDataModel)
 
 set ( QT_MOC_HEADERS
     Application/RiaApplication.h
-    
+
     ProjectDataModel/RimUiTreeModelPdm.h
     ProjectDataModel/RimUiTreeView.h
     ProjectDataModel/RimMimeData.h
-    
+
     UserInterface/RiuMainWindow.h
     UserInterface/RiuResultInfoPanel.h
     UserInterface/RiuViewer.h
@@ -139,7 +146,7 @@ set ( QT_MOC_HEADERS
     SocketInterface/RiaSocketServer.h
     UserInterface/RiuMultiCaseImportDialog.h
     UserInterface/RiuViewerCommands.h
-	
+
 )
 
 qt4_wrap_cpp( MOC_FILES_CPP ${QT_MOC_HEADERS} )
@@ -159,7 +166,7 @@ qt4_wrap_ui( FORM_FILES_CPP ${QT_UI_FILES} )
 #   )
 
 set( QRC_FILES
-    ${QRC_FILES} 
+    ${QRC_FILES}
     Resources/ResInsight.qrc
 )
 
@@ -177,7 +184,7 @@ endif()
 
 #set( RAW_SOURCES ${CPP_SOURCES} )
 #
-#list( REMOVE_ITEM RAW_SOURCES 
+#list( REMOVE_ITEM RAW_SOURCES
 #    RiaStdInclude.cpp
 #
 #    ${CODE_SOURCE_FILES}
@@ -207,7 +214,7 @@ endif()
 #)
 #
 #include( CustomPCH.cmake )
-#set( ALL_INCLUDES 
+#set( ALL_INCLUDES
 #    ${LibCore_SOURCE_DIR}
 #    ${LibGeometry_SOURCE_DIR}
 #    ${LibGuiQt_SOURCE_DIR}
@@ -233,6 +240,7 @@ source_group( "Application"         FILES ${APPLICATION_FILES} )
 source_group( "ModelVisualization"  FILES ${MODEL_VISUALIZATION_FILES} )
 source_group( "UserInterface"       FILES ${USER_INTERFACE_FILES} )
 source_group( "SocketInterface"     FILES ${SOCKET_INTERFACE_FILES} )
+source_group( "Network"             FILES ${NETWORK_FILES} )
 
 
 #############################################################################
@@ -242,7 +250,7 @@ source_group( "SocketInterface"     FILES ${SOCKET_INTERFACE_FILES} )
 # Default behaviour for a Qt application is a console application, resulting in a console window always being launced at startup
 # The following statement is used to control this behaviour
 #   set_target_properties( MY_TARGET PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:WINDOWS")
-# This setting i not honored by Cmake - http://public.kitware.com/Bug/view.php?id=14326 
+# This setting i not honored by Cmake - http://public.kitware.com/Bug/view.php?id=14326
 # We use the following workaround described in the bug report
 #   ADD_EXECUTABLE(${TARGET_NAME} WIN32 ${SRC})
 # See CMake symbol WIN32_EXECUTABLE for details
@@ -340,7 +348,7 @@ target_link_libraries( ResInsight ${LINK_LIBRARIES} ${EXTERNAL_LINK_LIBRARIES})
 if ((MSVC) AND (${RESINSIGHT_USE_ODB_API}))
 	# Find all the dlls
 	file (GLOB  RI_ALL_ODB_DLLS  ${RESINSIGHT_ODB_API_DIR}/lib/*.dll)
-	
+
 	# Strip off the path
 	foreach (aDLL  ${RI_ALL_ODB_DLLS})
 		 get_filename_component(filenameWithExt ${aDLL} NAME)
@@ -350,8 +358,8 @@ if ((MSVC) AND (${RESINSIGHT_USE_ODB_API}))
 	# Copy to target directory
 	foreach (aDLL ${RI_ODB_DLLS})
         add_custom_command(TARGET ResInsight POST_BUILD
-                           COMMAND ${CMAKE_COMMAND} -E copy_if_different  
-						   "${RESINSIGHT_ODB_API_DIR}/lib/${aDLL}"  
+                           COMMAND ${CMAKE_COMMAND} -E copy_if_different
+						   "${RESINSIGHT_ODB_API_DIR}/lib/${aDLL}"
 						   "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>")
     endforeach()
 
@@ -372,7 +380,7 @@ if (MSVC)
 endif(MSVC)
 
 #############################################################################
-# Install 
+# Install
 #############################################################################
 
 set (RESINSIGHT_LICENSE_FILES
@@ -427,7 +435,7 @@ if (RESINSIGHT_PRIVATE_INSTALL)
     endif()
 
     set (RESINSIGHT_FILES ${RESINSIGHT_FILES} ${RESINSIGHT_LICENSE_FILES})
-        
+
 
     install(TARGETS ResInsight DESTINATION ${RESINSIGHT_FINAL_NAME})
 
