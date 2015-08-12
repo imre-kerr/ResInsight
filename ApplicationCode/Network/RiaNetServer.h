@@ -1,48 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2011-     Statoil ASA
-//  Copyright (C) 2013-     Ceetron Solutions AS
-//  Copyright (C) 2011-2012 Ceetron AS
-//
-//  ResInsight is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  ResInsight is distributed in the hope that it will be useful, but WITHOUT ANY
-//  WARRANTY; without even the implied warranty of MERCHANTABILITY or
-//  FITNESS FOR A PARTICULAR PURPOSE.
-//
-//  See the GNU General Public License at <http://www.gnu.org/licenses/gpl.html>
-//  for more details.
-//
-/////////////////////////////////////////////////////////////////////////////////
-
 #pragma once
 
 #include <QObject>
-
-class QTcpServer;
-class QTcpSocket;
-class QErrorMessage;
+#include <QtCore>
+#include <QtNetwork>
 
 class RiaNetServer : public QObject
 {
     Q_OBJECT
 
 public:
-    RiaNetServer(QObject *parent = 0, unsigned short serverPort = 3310);
-    ~RiaNetServer();
+    explicit            RiaNetServer(QObject* parent = 0, unsigned short serverPort = 3310);
 
-    unsigned short      serverPort();
+signals:
+    void                dataReceived(QByteArray);
 
-    QErrorMessage*      errorMessageDialog() { return m_errorMessageDialog; }
-    QTcpSocket*         currentClient() { return m_currentClient; }
+private slots:
+    void                slotNewConnection();
+    void                slotDisconnected();
+    void                slotReadyRead();
 
 private:
-    QErrorMessage*      m_errorMessageDialog;
-
     QTcpServer*         m_tcpServer;
-    QTcpSocket*         m_currentClient;
-    unsigned short      m_serverPort;
+
+    QHash<QTcpSocket*, QByteArray*> m_buffers; //We need a buffer to store data until block has completely received
+    QHash<QTcpSocket*, qint32*> m_sizes; //We need to store the size to verify if a block has received completely
+
 };

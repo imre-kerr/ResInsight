@@ -1360,7 +1360,7 @@ void RiuMainWindow::exitFullscreen()
     if (RiaApplication::instance()->activeReservoirView() &&  RiaApplication::instance()->activeReservoirView()->viewer())
     {
         RiuViewer *viewer = RiaApplication::instance()->activeReservoirView()->viewer();
-        //viewer->mainCamera()->setIsFullscreen(false);
+        viewer->mainCamera()->setIsFullscreen(false);
         viewer->setParent(this);
         setCentralWidget(viewer);
         m_isMaximized = false;

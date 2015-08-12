@@ -147,6 +147,8 @@ set ( QT_MOC_HEADERS
     UserInterface/RiuMultiCaseImportDialog.h
     UserInterface/RiuViewerCommands.h
 
+    Network/RiaNetServer.h
+    Network/RiaNetClient.h
 )
 
 qt4_wrap_cpp( MOC_FILES_CPP ${QT_MOC_HEADERS} )

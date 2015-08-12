@@ -69,7 +69,8 @@ Camera::Camera()
     m_frontPlaneFrustumHeight(0),
     m_nearPlane(0.05),
     m_farPlane(10000.0),
-    m_cachedFrontPlanePixelHeight(0)
+    m_cachedFrontPlanePixelHeight(0),
+    m_isFullScreen(false)
 {
     m_viewport = new Viewport;
 

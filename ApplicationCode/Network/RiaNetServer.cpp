@@ -1,64 +1,72 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2011-     Statoil ASA
-//  Copyright (C) 2013-     Ceetron Solutions AS
-//  Copyright (C) 2011-2012 Ceetron AS
-//
-//  ResInsight is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  ResInsight is distributed in the hope that it will be useful, but WITHOUT ANY
-//  WARRANTY; without even the implied warranty of MERCHANTABILITY or
-//  FITNESS FOR A PARTICULAR PURPOSE.
-//
-//  See the GNU General Public License at <http://www.gnu.org/licenses/gpl.html>
-//  for more details.
-//
-/////////////////////////////////////////////////////////////////////////////////
-
 #include "RiaNetServer.h"
 
-#include <QtNetwork>
+static inline qint32 ArrayToInt(QByteArray source);
 
-#include "RiuMainWindow.h"
-
-//--------------------------------------------------------------------------------------------------
-///
-//--------------------------------------------------------------------------------------------------
-RiaNetServer::RiaNetServer(QObject* parent, unsigned short serverPort)
-: QObject(parent),
-  m_tcpServer(NULL),
-  m_currentClient(NULL),
-  m_serverPort(serverPort)
+RiaNetServer::RiaNetServer(QObject *parent, unsigned short serverPort)
+: QObject(parent)
 {
-    m_errorMessageDialog = new QErrorMessage(RiuMainWindow::instance());
-
     m_tcpServer = new QTcpServer(this);
+    connect(m_tcpServer, SIGNAL(newConnection()), this, SLOT(slotNewConnection()));
+    qDebug() << "Listening:" << m_tcpServer->listen(QHostAddress::Any, serverPort);
+}
 
-    if (!m_tcpServer->listen(QHostAddress::LocalHost, m_serverPort)) {
-        m_errorMessageDialog->showMessage("Couldn't start network server.\n"
-                                          "Please close all other ResInsight processes and try again.\n"
-                                          "\n"
-                                          + tr("The error given was: %1.").arg(m_tcpServer->errorString()));
-        return;
+void RiaNetServer::slotNewConnection()
+{
+    while (m_tcpServer->hasPendingConnections())
+    {
+        QTcpSocket *socket = m_tcpServer->nextPendingConnection();
+        connect(socket, SIGNAL(readyRead()), this, SLOT(slotReadyRead()));
+        connect(socket, SIGNAL(disconnected()), this, SLOT(slotDisconnected()));
+        QByteArray *buffer = new QByteArray();
+        qint32 *s = new qint32(0);
+        m_buffers.insert(socket, buffer);
+        m_sizes.insert(socket, s);
     }
 }
 
-//--------------------------------------------------------------------------------------------------
-///
-//--------------------------------------------------------------------------------------------------
-RiaNetServer::~RiaNetServer()
+void RiaNetServer::slotDisconnected()
 {
-    // Make sure all commands are done
+    QTcpSocket *socket = static_cast<QTcpSocket*>(sender());
+    QByteArray *buffer = m_buffers.value(socket);
+    qint32 *s = m_sizes.value(socket);
+    socket->deleteLater();
+    delete buffer;
+    delete s;
 }
 
-//--------------------------------------------------------------------------------------------------
-///
-//--------------------------------------------------------------------------------------------------
-unsigned short RiaNetServer::serverPort()
+void RiaNetServer::slotReadyRead()
 {
-    if (m_tcpServer) return m_tcpServer->serverPort();
-    else return 0;
+    QTcpSocket *socket = static_cast<QTcpSocket*>(sender());
+    QByteArray *buffer = m_buffers.value(socket);
+    qint32 *s = m_sizes.value(socket);
+    qint32 size = *s;
+    while (socket->bytesAvailable() > 0)
+    {
+        buffer->append(socket->readAll());
+        while ((size == 0 && buffer->size() >= 4) || (size > 0 && buffer->size() >= size)) //While can process data, process it
+        {
+            if (size == 0 && buffer->size() >= 4) //if size of data has received completely, then store it on our global variable
+            {
+                size = ArrayToInt(buffer->mid(0, 4));
+                *s = size;
+                buffer->remove(0, 4);
+            }
+            if (size > 0 && buffer->size() >= size) // If data has received completely, then emit our SIGNAL with the data
+            {
+                QByteArray data = buffer->mid(0, size);
+                buffer->remove(0, size);
+                size = 0;
+                *s = size;
+                emit dataReceived(data);
+            }
+        }
+    }
+}
+
+qint32 ArrayToInt(QByteArray source)
+{
+    qint32 temp;
+    QDataStream data(&source, QIODevice::ReadWrite);
+    data >> temp;
+    return temp;
 }
