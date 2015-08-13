@@ -45,6 +45,8 @@
 #include "RimEclipseFaultColors.h"
 
 #include "RiaSocketServer.h"
+#include "RiaNetServer.h"
+#include "RiaNetClient.h"
 #include "cafUiProcess.h"
 //
 #include "RimUiTreeModelPdm.h"
@@ -158,7 +160,9 @@ RiaApplication::RiaApplication(int& argc, char** argv)
  
     setWindowIcon(QIcon(":/AppLogo48x48.png"));
 
-    m_socketServer = new RiaSocketServer( this);
+    m_socketServer = new RiaSocketServer(this);
+    m_netServer = new RiaNetServer(this);
+    m_netClient = new RiaNetClient(this);
     m_workerProcess = NULL;
 
 #ifdef WIN32

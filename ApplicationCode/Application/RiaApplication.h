@@ -36,6 +36,8 @@ class RigCaseData;
 class RimEclipseCase;
 class Drawable;
 class RiaSocketServer;
+class RiaNetServer;
+class RiaNetClient;
 class RiaPreferences;
 class RimEclipseView;
 class RimView;
@@ -183,6 +185,8 @@ private:
     QTimer*                             m_resViewUpdateTimer;
 
     RiaSocketServer*                    m_socketServer;
+    RiaNetServer*                       m_netServer;
+    RiaNetClient*                       m_netClient;
 
     caf::UiProcess*                     m_workerProcess;
 
