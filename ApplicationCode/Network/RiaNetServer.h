@@ -9,7 +9,7 @@ class RiaNetServer : public QObject
     Q_OBJECT
 
 public:
-    explicit            RiaNetServer(QObject* parent = 0, unsigned short serverPort = 3310);
+    RiaNetServer(QObject* parent = 0, unsigned short serverPort = 3310);
 
 signals:
     void                dataReceived(QByteArray);
