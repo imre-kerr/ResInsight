@@ -21,11 +21,21 @@ bool RiaNetClient::slotConnect(std::vector<QString> hosts)
     bool success = true;
     for (std::vector<QString>::iterator it = hosts.begin(); it != hosts.end(); ++it)
     {
-        QUrl url(*it);
+        QUrl url("http://" + *it); // QUrl constructor is garbage
         QTcpSocket *socket = new QTcpSocket(this);
         socket->connectToHost(url.host(), url.port());
         success &= socket->waitForConnected();
-        m_sockets.push_back(socket);
+        if (success)
+        {
+            qDebug() << "Connected to: " << *it;
+            m_sockets.push_back(socket);
+        }
+        else
+        {
+            qDebug() << "Couldn't connect to: " << url.host() << ":" << url.port();
+            qDebug() << "Reason: " << socket->errorString();
+            delete socket;
+        }
     }
     return success;
 }

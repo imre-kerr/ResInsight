@@ -264,6 +264,11 @@ void RiuMainWindow::createActions()
     m_editPreferences                = new QAction("&Preferences...", this);
     connect(m_editPreferences,	  SIGNAL(triggered()), SLOT(slotEditPreferences()));
 
+    // Network actions
+    m_connectToHosts               = new QAction(QIcon::fromTheme("network-server"), "Connect to Hosts", this);
+    m_connectToHosts->setToolTip("Connect to Hosts");
+    connect(m_connectToHosts, SIGNAL(triggered()), RiaApplication::instance(), SLOT(slotConnectToHosts()));
+
     // View actions
     m_viewFromNorth                = new QAction(QIcon(":/SouthViewArrow.png"), "Look South", this);
     m_viewFromNorth->setToolTip("Look South");
@@ -443,6 +448,9 @@ void RiuMainWindow::createMenus()
 
     connect(editMenu, SIGNAL(aboutToShow()), SLOT(slotRefreshEditActions()));
 
+    // Network menu
+    QMenu* networkMenu = menuBar()->addMenu("&Network");
+    networkMenu->addAction(m_connectToHosts);
 
     // View menu
     QMenu* viewMenu = menuBar()->addMenu("&View");
@@ -505,6 +513,10 @@ void RiuMainWindow::createToolBars()
     m_snapshotToolbar->addAction(m_snapshotToClipboard);
     m_snapshotToolbar->addAction(m_snapshotToFile);
     m_snapshotToolbar->addAction(m_snapshotAllViewsToFile);
+
+    m_networkToolBar = addToolBar(tr("Network"));
+    m_networkToolBar->setObjectName(m_networkToolBar->windowTitle());
+    m_networkToolBar->addAction(m_connectToHosts);
 
    // View toolbar
     m_viewToolBar = addToolBar(tr("View"));

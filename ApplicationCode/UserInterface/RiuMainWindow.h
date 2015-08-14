@@ -158,6 +158,9 @@ private:
     QAction*		    m_editPreferences;
     QAction*		    m_newPropertyView;
 
+    // Network actions
+    QAction*            m_connectToHosts;
+
     // View actions
     QAction*		    m_viewFromNorth;
     QAction*		    m_viewFromSouth;
@@ -195,6 +198,7 @@ private:
     QToolBar*           m_viewToolBar;
     QToolBar*           m_standardToolBar;
     QToolBar*           m_snapshotToolbar;
+    QToolBar*           m_networkToolBar;
 
 
     QFrame*             m_CentralFrame;

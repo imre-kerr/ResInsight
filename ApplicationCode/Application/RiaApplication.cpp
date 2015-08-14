@@ -1160,6 +1160,14 @@ QStringList RiaApplication::octaveArguments() const
 }
 
 //--------------------------------------------------------------------------------------------------
+///
+//--------------------------------------------------------------------------------------------------
+void RiaApplication::slotConnectToHosts()
+{
+    m_netClient->slotConnect(m_preferences->connectTo);
+}
+
+//--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
 void RiaApplication::slotWorkerProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)

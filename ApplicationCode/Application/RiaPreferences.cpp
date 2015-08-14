@@ -158,6 +158,10 @@ void RiaPreferences::defineUiOrdering(QString uiConfigName, caf::PdmUiOrdering& 
     multiScreenGroup->add(&totalScreenHeight);
     multiScreenGroup->add(&subScreenXOffset);
     multiScreenGroup->add(&subScreenYOffset);
+
+    caf::PdmUiGroup* networkGroup = uiOrdering.addNewGroup("Network settings");
+    networkGroup->add(&tcpPort);
+    networkGroup->add(&connectTo);
 }
 
 //--------------------------------------------------------------------------------------------------

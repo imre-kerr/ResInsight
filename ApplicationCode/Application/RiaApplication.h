@@ -174,7 +174,7 @@ private:
 
 private slots:
     void                slotWorkerProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
-
+    void                slotConnectToHosts();
     void                slotUpdateScheduledDisplayModels();
 
 private:
@@ -184,8 +184,8 @@ private:
     std::vector<caf::PdmPointer<RimView> > m_resViewsToUpdate;
     QTimer*                             m_resViewUpdateTimer;
 
-    RiaSocketServer*                    m_socketServer;
-    RiaNetServer*                       m_netServer;
+    RiaSocketServer*                    m_socketServer = NULL;
+    RiaNetServer*                       m_netServer = NULL;
     RiaNetClient*                       m_netClient;
 
     caf::UiProcess*                     m_workerProcess;
