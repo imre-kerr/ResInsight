@@ -161,7 +161,7 @@ RiaApplication::RiaApplication(int& argc, char** argv)
     setWindowIcon(QIcon(":/AppLogo48x48.png"));
 
     m_socketServer = new RiaSocketServer(this);
-    m_netServer = new RiaNetServer(this);
+    m_netServer = new RiaNetServer(this, m_preferences->tcpPort);
     m_netClient = new RiaNetClient(this);
     m_workerProcess = NULL;
 
@@ -1405,6 +1405,10 @@ void RiaApplication::applyPreferences()
         this->project()->setScriptDirectories(m_preferences->scriptDirectories());
         RimUiTreeModelPdm* treeModel = RiuMainWindow::instance()->uiPdmModel();
         if (treeModel) treeModel->updateUiSubTree(this->project()->scriptCollection());
+    }
+    if (m_netServer)
+    {
+        m_netServer->setServerPort(m_preferences->tcpPort);
     }
 }
 

@@ -10,6 +10,12 @@ RiaNetServer::RiaNetServer(QObject *parent, unsigned short serverPort)
     qDebug() << "Listening:" << m_tcpServer->listen(QHostAddress::Any, serverPort);
 }
 
+void RiaNetServer::setServerPort(unsigned short serverPort)
+{
+    m_tcpServer->close();
+    qDebug() << "Listening:" << m_tcpServer->listen(QHostAddress::Any, serverPort);
+}
+
 void RiaNetServer::slotNewConnection()
 {
     while (m_tcpServer->hasPendingConnections())

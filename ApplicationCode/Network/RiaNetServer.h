@@ -11,6 +11,8 @@ class RiaNetServer : public QObject
 public:
     RiaNetServer(QObject* parent = 0, unsigned short serverPort = 3310);
 
+    void                setServerPort(unsigned short serverPort);
+
 signals:
     void                dataReceived(QByteArray);
 
