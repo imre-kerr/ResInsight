@@ -1,4 +1,5 @@
 #include "RiaNetServer.h"
+#include "RiaNetCommand.h"
 
 static inline qint32 ArrayToInt(QByteArray source);
 
@@ -66,6 +67,30 @@ void RiaNetServer::slotReadyRead()
                 emit dataReceived(data);
             }
         }
+    }
+}
+
+void RiaNetServer::slotDataRecieved(QByteArray data)
+{
+    QDataStream stream(&data, QIODevice::ReadOnly);
+    RiaNetCommand::CommandType type;
+    stream >> type;
+    switch (type)
+    {
+    case RiaNetCommand::CommandType::Animation:
+    {
+        RiaAnimationCommand comm;
+        stream >> comm;
+        comm.execute();
+        break;
+    }
+    case RiaNetCommand::CommandType::Camera:
+    {
+        RiaCameraCommand comm;
+        stream >> comm;
+        comm.execute();
+        break;
+    }
     }
 }
 

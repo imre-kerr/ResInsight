@@ -79,6 +79,9 @@ set( SOCKET_INTERFACE_FILES
 set( NETWORK_FILES
     Network/RiaNetServer.cpp
     Network/RiaNetClient.cpp
+    Network/RiaNetCommand.cpp
+    Network/RiaCameraCommand.cpp
+    Network/RiaAnimationCommand.cpp
 )
 
 
@@ -149,6 +152,9 @@ set ( QT_MOC_HEADERS
 
     Network/RiaNetServer.h
     Network/RiaNetClient.h
+    Network/RiaNetCommand.h
+    Network/RiaCameraCommand.h
+    Network/RiaAnimationCommand.h
 )
 
 qt4_wrap_cpp( MOC_FILES_CPP ${QT_MOC_HEADERS} )

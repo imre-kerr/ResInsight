@@ -20,6 +20,7 @@ private slots:
     void                slotNewConnection();
     void                slotDisconnected();
     void                slotReadyRead();
+    void                slotDataRecieved(QByteArray);
 
 private:
     QTcpServer*         m_tcpServer;
