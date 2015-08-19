@@ -20,6 +20,6 @@ QDataStream& operator>>(QDataStream& ds, RiaCameraCommand& obj)
 {
     int t;
     ds >> t;
-    obj.m_type = static_cast<RiaCameraCommand::MatrixType>(t);
+    obj.m_type = static_cast<cvf::Camera::MatrixType>(t);
     return ds >> obj.m_matrix;
 }

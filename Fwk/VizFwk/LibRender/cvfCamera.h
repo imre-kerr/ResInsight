@@ -46,6 +46,7 @@ namespace cvf {
 class BoundingBox;
 class Viewport;
 class Ray;
+class RiaNetClient;
 
 
 //==================================================================================================
@@ -62,6 +63,12 @@ public:
         ORTHO                   ///< Orthographic (parallel) projection
     };
 
+    enum MatrixType
+    {
+        VIEW,
+        PROJECTION
+    };
+
 public:
     Camera();
     ~Camera();
@@ -76,6 +83,7 @@ public:
     Vec3d           right() const;   
 
     ProjectionType  projection() const;
+    void            setProjectionMatrix(const Mat4d& mat);
     void            setProjectionAsPerspective(double fieldOfViewYDeg, double nearPlane, double farPlane);
     void            setProjectionAsOrtho(double height, double nearPlane, double farPlane);
     void            setProjectionAsUnitOrtho();
@@ -122,6 +130,9 @@ public:
     Frustum         frustum() const;
 
     void            applyOpenGL() const;
+
+signals:
+    void            matrixChanged(MatrixType type, const Mat4d& mat);
 
 private:
     void            updateCachedValues();

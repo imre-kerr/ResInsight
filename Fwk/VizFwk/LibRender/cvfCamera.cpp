@@ -194,6 +194,20 @@ Camera::ProjectionType Camera::projection() const
     return m_projectionType;
 }
 
+//--------------------------------------------------------------------------------------------------
+/// Set projection matrix to the given matrix
+//--------------------------------------------------------------------------------------------------
+void Camera::setProjectionMatrix(const Mat4d& mat)
+{
+    m_projectionMatrix = mat;
+
+    if (m_isFullScreen)
+    {
+        m_projectionMatrix = m_zoomMatrix*m_projectionMatrix;
+    }
+
+    updateCachedValues();
+}
 
 //--------------------------------------------------------------------------------------------------
 /// Setup a perspective projection. 
