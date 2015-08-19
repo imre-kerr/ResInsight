@@ -37,6 +37,7 @@
 
 #pragma once
 
+#include <QDataStream>
 #include "cvfSystem.h"
 #include "cvfVector3.h"
 #include "cvfVector4.h"
@@ -73,6 +74,11 @@ public:
     void                multiply(const Matrix4& mat);
     const Matrix4       operator*(const Matrix4& rhs) const;
     const Vector4<S>    operator*(const Vector4<S>& rhs) const;
+
+    template<typename T>
+    friend QDataStream&        operator<<(QDataStream& ds, const Matrix4<T>& obj);
+    template<typename T>
+    friend QDataStream&        operator>>(QDataStream& ds, Matrix4<T>& obj);
 
     void                setIdentity();
     bool                isIdentity() const;
