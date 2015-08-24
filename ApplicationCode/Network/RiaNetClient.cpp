@@ -77,6 +77,7 @@ void RiaNetClient::slotMatrixChanged(cvf::Camera::MatrixType type, const cvf::Ma
     QByteArray data;
     QDataStream stream(&data, QIODevice::ReadWrite);
     stream << comm;
+
     if (!slotWriteData(data))
     {
         qDebug() << "Sending data failed!";

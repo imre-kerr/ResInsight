@@ -38,6 +38,7 @@
 #pragma once
 
 #include <QDataStream>
+#include <QDebug>
 #include "cvfSystem.h"
 #include "cvfVector3.h"
 #include "cvfVector4.h"
@@ -79,6 +80,9 @@ public:
     friend QDataStream&        operator<<(QDataStream& ds, const Matrix4<T>& obj);
     template<typename T>
     friend QDataStream&        operator>>(QDataStream& ds, Matrix4<T>& obj);
+
+    template<typename T>
+    friend QDebug             operator<<(QDebug dbg, const Matrix4<T>& obj);
 
     void                setIdentity();
     bool                isIdentity() const;

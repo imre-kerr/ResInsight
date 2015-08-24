@@ -117,7 +117,8 @@ void Camera::setFromLookAt(const Vec3d& eye, const Vec3d& center, const Vec3d& u
     m_viewMatrix = invViewMatrix.getInverted();
     emit matrixChanged(VIEW, m_viewMatrix);
 
-    qDebug() << "Sending matrix change...";
+    qDebug() << "Sending new matrix:";
+    qDebug() << m_viewMatrix;
     updateCachedValues();
 }
 

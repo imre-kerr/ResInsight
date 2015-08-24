@@ -19,6 +19,8 @@ RiaCameraCommand::RiaCameraCommand(QObject *parent, cvf::Camera::MatrixType type
 
 void RiaCameraCommand::execute()
 {
+    qDebug() << "Applying matrix: ";
+    qDebug() << m_matrix;
     RimView *activeReservoirView = RiaApplication::instance()->activeReservoirView();
     if (activeReservoirView && activeReservoirView->viewer())
     {

@@ -962,6 +962,24 @@ QDataStream& operator>>(QDataStream& ds, Matrix4<T>& obj)
 }
 
 
+//----------------------------------------------------------------------------------------------------
+///
+//----------------------------------------------------------------------------------------------------
+template <typename T>
+QDebug operator<<(QDebug dbg, const Matrix4<T>& obj)
+{
+    for (int row = 0; row < 4; ++row)
+    {
+        for (int col = 0; col < 4; ++col)
+        {
+            dbg << obj.rowCol(row, col) << " ";
+        }
+        dbg << "\n";
+    }
+    return dbg;
+}
+
+
 
 } 
 
