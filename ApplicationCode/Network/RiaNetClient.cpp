@@ -1,4 +1,11 @@
 #include "RiaNetClient.h"
+#include "RiaCameraCommand.h"
+#include "RiaApplication.h"
+#include "RimView.h"
+#include "RiuViewer.h"
+#include "cvfCamera.h"
+#include "cvfObject.h"
+#include "cvfMatrix4.h"
 
 static inline QByteArray IntToArray(qint32 source);
 
@@ -18,6 +25,8 @@ RiaNetClient::~RiaNetClient()
 
 bool RiaNetClient::slotConnect(std::vector<QString> hosts)
 {
+    cvf::Camera *cam = RiaApplication::instance()->activeReservoirView()->viewer()->mainCamera();
+    connect(cam, SIGNAL(matrixChanged(cvf::Camera::MatrixType, const cvf::Mat4d&)), this, SLOT(slotMatrixChanged(cvf::Camera::MatrixType, const cvf::Mat4d&)));
     bool success = true;
     for (std::vector<QString>::iterator it = hosts.begin(); it != hosts.end(); ++it)
     {
@@ -48,6 +57,7 @@ bool RiaNetClient::slotWriteData(QByteArray data)
         QTcpSocket* socket = *it;
         if (socket->state() == QAbstractSocket::ConnectedState)
         {
+            qDebug() << "Writing data to " << socket->peerName();
             socket->write(IntToArray(data.size())); //write size of data
             socket->write(data); //write the data itself
             success &= socket->waitForBytesWritten();
@@ -58,6 +68,23 @@ bool RiaNetClient::slotWriteData(QByteArray data)
         }
     }
     return success;
+}
+
+void RiaNetClient::slotMatrixChanged(cvf::Camera::MatrixType type, const cvf::Mat4d &mat)
+{
+    qDebug() << "Got matrix change! Sending via network...";
+    RiaCameraCommand comm(0, type, mat);
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::ReadWrite);
+    stream << comm;
+    if (!slotWriteData(data))
+    {
+        qDebug() << "Sending data failed!";
+    }
+    else
+    {
+        qDebug() << "Send successful!";
+    }
 }
 
 QByteArray IntToArray(qint32 source) //Use qint32 to ensure that the number have 4 bytes

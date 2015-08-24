@@ -63,8 +63,9 @@ namespace cvf {
 //--------------------------------------------------------------------------------------------------
 ///  
 //--------------------------------------------------------------------------------------------------
-Camera::Camera()
-:   m_projectionType(PERSPECTIVE),
+Camera::Camera(QObject *parent)
+:   QObject(parent),
+    m_projectionType(PERSPECTIVE),
     m_fieldOfViewYDeg(40.0),
     m_frontPlaneFrustumHeight(0),
     m_nearPlane(0.05),
@@ -114,7 +115,9 @@ void Camera::setFromLookAt(const Vec3d& eye, const Vec3d& center, const Vec3d& u
 {
     Mat4d invViewMatrix = createLookAtMatrix(eye, center, up);
     m_viewMatrix = invViewMatrix.getInverted();
+    emit matrixChanged(VIEW, m_viewMatrix);
 
+    qDebug() << "Sending matrix change...";
     updateCachedValues();
 }
 

@@ -11,6 +11,7 @@ class RiaCameraCommand : public QObject
 
 public:
     explicit RiaCameraCommand(QObject *parent = 0);
+    RiaCameraCommand(QObject *parent, cvf::Camera::MatrixType type, cvf::Mat4d matrix);
 
     void execute();
 

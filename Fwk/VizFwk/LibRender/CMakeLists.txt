@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 2.8)
 project(LibRender)
 
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+find_package(Qt4 REQUIRED)
+
 # Use our strict compile flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${CEE_STRICT_CXX_FLAGS}")
 
@@ -21,7 +25,6 @@ endif()
 include_directories(../LibCore)
 include_directories(../LibGeometry)
 include_directories(glew)
-
 
 set(CEE_HEADER_FILES
 cvfBufferObjectManaged.h

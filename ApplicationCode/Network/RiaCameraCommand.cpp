@@ -1,4 +1,7 @@
 #include "RiaCameraCommand.h"
+#include "RiaApplication.h"
+#include "RimView.h"
+#include "RiuViewer.h"
 
 RiaCameraCommand::RiaCameraCommand(QObject *parent)
     : QObject(parent)
@@ -6,9 +9,28 @@ RiaCameraCommand::RiaCameraCommand(QObject *parent)
 
 }
 
-void RiaCameraCommand::execute()
+RiaCameraCommand::RiaCameraCommand(QObject *parent, cvf::Camera::MatrixType type, cvf::Mat4d matrix)
+    : QObject(parent),
+      m_type(type),
+      m_matrix(matrix)
 {
 
+}
+
+void RiaCameraCommand::execute()
+{
+    RimView *activeReservoirView = RiaApplication::instance()->activeReservoirView();
+    if (activeReservoirView && activeReservoirView->viewer())
+    {
+        if (m_type == cvf::Camera::PROJECTION)
+        {
+            activeReservoirView->viewer()->mainCamera()->setProjectionMatrix(m_matrix);
+        }
+        else
+        {
+            activeReservoirView->viewer()->mainCamera()->setViewMatrix(m_matrix);
+        }
+    }
 }
 
 QDataStream& operator<<(QDataStream& ds, const RiaCameraCommand& obj)

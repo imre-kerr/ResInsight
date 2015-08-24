@@ -8,6 +8,7 @@ RiaNetServer::RiaNetServer(QObject *parent, unsigned short serverPort)
 {
     m_tcpServer = new QTcpServer(this);
     connect(m_tcpServer, SIGNAL(newConnection()), this, SLOT(slotNewConnection()));
+    connect(this, SIGNAL(dataReceived(QByteArray)), this, SLOT(slotDataRecieved(QByteArray)));
     qDebug() << "Listening:" << m_tcpServer->listen(QHostAddress::Any, serverPort);
 }
 
@@ -72,6 +73,7 @@ void RiaNetServer::slotReadyRead()
 
 void RiaNetServer::slotDataRecieved(QByteArray data)
 {
+    qDebug() << "I got some data!";
     QDataStream stream(&data, QIODevice::ReadOnly);
     RiaNetCommand::CommandType type;
     stream >> type;

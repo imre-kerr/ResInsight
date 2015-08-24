@@ -37,6 +37,8 @@
 
 #pragma once
 
+#include <QtCore>
+
 #include "cvfObject.h"
 #include "cvfMatrix4.h"
 #include "cvfFrustum.h"
@@ -54,8 +56,9 @@ class RiaNetClient;
 // A camera defines the view point, view direction and the up vector
 //
 //==================================================================================================
-class Camera : public Object
+class Camera : public QObject, public Object
 {
+    Q_OBJECT
 public:
     enum ProjectionType
     {
@@ -70,7 +73,7 @@ public:
     };
 
 public:
-    Camera();
+    Camera(QObject *parent = 0);
     ~Camera();
 
     void            setViewMatrix(const Mat4d& mat);
@@ -132,7 +135,7 @@ public:
     void            applyOpenGL() const;
 
 signals:
-    void            matrixChanged(MatrixType type, const Mat4d& mat);
+    void            matrixChanged(cvf::Camera::MatrixType, const cvf::Mat4d&);
 
 private:
     void            updateCachedValues();
