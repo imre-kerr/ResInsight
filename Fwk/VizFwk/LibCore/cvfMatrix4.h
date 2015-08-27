@@ -37,12 +37,14 @@
 
 #pragma once
 
+#include <QtCore>
 #include <QDataStream>
 #include <QDebug>
 #include "cvfSystem.h"
 #include "cvfVector3.h"
 #include "cvfVector4.h"
 #include "cvfMatrix3.h"
+#include <cstdio>
 
 
 namespace cvf {
@@ -83,6 +85,8 @@ public:
 
     template<typename T>
     friend QDebug             operator<<(QDebug dbg, const Matrix4<T>& obj);
+    template<typename T>
+    friend QDebug             matrixDump(QDebug dbg, const Matrix4<T>& obj);
 
     void                setIdentity();
     bool                isIdentity() const;

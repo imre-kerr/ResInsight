@@ -73,14 +73,7 @@ void RiaNetServer::slotReadyRead()
 
 void RiaNetServer::slotDataRecieved(QByteArray data)
 {
-    char buf[1024];
     QDataStream stream(&data, QIODevice::ReadOnly);
-    int len = stream.readRawData(buf, 1024);
-    qDebug() << "Received raw data:";
-    for(int i = 0; i < len; ++i)
-    {
-        qDebug() << (quint8)(buf[i]);
-    }
     RiaNetCommand::CommandType type;
     stream >> type;
     switch (type)

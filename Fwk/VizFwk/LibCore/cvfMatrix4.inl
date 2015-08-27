@@ -979,6 +979,26 @@ QDebug operator<<(QDebug dbg, const Matrix4<T>& obj)
     return dbg;
 }
 
+//----------------------------------------------------------------------------------------------------
+///
+//----------------------------------------------------------------------------------------------------
+template <typename T>
+QDebug matrixDump(QDebug dbg, const Matrix4<T>& obj)
+{
+    char buf[64];
+    for (int row = 0; row < 4; ++row)
+    {
+        for (int col = 0; col < 4; ++col)
+        {
+            double val = obj.rowCol(row, col);
+            quint8 *bytes = reinterpret_cast<quint8*>(&val);
+            snprintf(buf, 64, "%02X %02X %02X %02X %02X %02X %02X %02X ", bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5], bytes[6], bytes[7]);
+            dbg << buf;
+        }
+        dbg << "\n";
+    }
+    return dbg;
+}
 
 
 } 
