@@ -32,16 +32,17 @@ void RiaCameraCommand::execute()
         {
             activeReservoirView->viewer()->mainCamera()->setViewMatrix(m_matrix);
         }
+        activeReservoirView->viewer()->update();
     }
 }
 
 QDataStream& operator<<(QDataStream& ds, const RiaCameraCommand& obj)
 {
     int pad = 0xDEADBEEF; // Jesus Christ, how horrifying
-    ds << pad;
 
     int t = static_cast<int>(obj.m_type);
     ds << t;
+    ds << pad;
     ds << obj.m_matrix;
     return ds;
 }
