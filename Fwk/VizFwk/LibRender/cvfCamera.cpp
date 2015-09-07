@@ -100,8 +100,11 @@ Camera::~Camera()
 //--------------------------------------------------------------------------------------------------
 void Camera::setViewMatrix(const Mat4d& mat) 
 { 
-    m_viewMatrix = mat; 
+    m_viewMatrix = mat;
+    emit matrixChanged(VIEW, m_viewMatrix);
 
+    qDebug() << "Sending new matrix:";
+    qDebug() << m_viewMatrix;
     updateCachedValues();
 }
 
@@ -205,6 +208,11 @@ void Camera::setProjectionMatrix(const Mat4d& mat)
 {
     m_projectionMatrix = mat;
 
+    emit matrixChanged(PROJECTION, m_projectionMatrix);
+
+    qDebug() << "Sending new matrix:";
+    qDebug() << m_projectionMatrix;
+
     if (m_isFullScreen)
     {
         m_projectionMatrix = m_zoomMatrix*m_projectionMatrix;
@@ -233,6 +241,11 @@ void Camera::setProjectionAsPerspective(double fieldOfViewYDeg, double nearPlane
 
     m_projectionMatrix = createPerspectiveMatrix(Math::toRadians(m_fieldOfViewYDeg), aspectRatio(), m_nearPlane, m_farPlane);
 
+    emit matrixChanged(PROJECTION, m_projectionMatrix);
+
+    qDebug() << "Sending new matrix:";
+    qDebug() << m_projectionMatrix;
+
     if (m_isFullScreen)
     {
         m_projectionMatrix = m_zoomMatrix*m_projectionMatrix;
@@ -260,6 +273,11 @@ void Camera::setProjectionAsOrtho(double height, double nearPlane, double farPla
 
     m_projectionMatrix = createOrthoMatrix(-width/2.0, width/2.0, -height/2.0, height/2.0, m_nearPlane, m_farPlane);
 
+    emit matrixChanged(PROJECTION, m_projectionMatrix);
+
+    qDebug() << "Sending new matrix:";
+    qDebug() << m_projectionMatrix;
+
     if (m_isFullScreen)
     {
         m_projectionMatrix = m_zoomMatrix*m_projectionMatrix;
@@ -284,6 +302,11 @@ void Camera::setProjectionAsUnitOrtho()
 
     m_projectionMatrix = createOrthoMatrix(0.0, 1.0, 0.0, 1.0, m_nearPlane, m_farPlane);
 
+    emit matrixChanged(PROJECTION, m_projectionMatrix);
+
+    qDebug() << "Sending new matrix:";
+    qDebug() << m_projectionMatrix;
+
     if (m_isFullScreen)
     {
         m_projectionMatrix = m_zoomMatrix*m_projectionMatrix;
@@ -307,6 +330,11 @@ void Camera::setProjectionAsPixelExact2D()
     m_farPlane = 1.0;
 
     m_projectionMatrix = createOrthoMatrix(0, m_viewport->width(), 0, m_viewport->height(), m_nearPlane, m_farPlane);
+
+    emit matrixChanged(PROJECTION, m_projectionMatrix);
+
+    qDebug() << "Sending new matrix:";
+    qDebug() << m_projectionMatrix;
 
     if (m_isFullScreen)
     {
