@@ -18,6 +18,7 @@ public slots:
     bool slotWriteData(QByteArray data);
 
     void slotMatrixChanged(cvf::Camera::MatrixType, const cvf::Mat4d&);
+    void slotFrameChanged(int);
 
 private:
     std::vector<QTcpSocket*>    m_sockets;

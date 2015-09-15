@@ -38,11 +38,8 @@ void RiaCameraCommand::execute()
 
 QDataStream& operator<<(QDataStream& ds, const RiaCameraCommand& obj)
 {
-    int pad = 0xDEADBEEF; // Jesus Christ, how horrifying
-
     int t = static_cast<int>(obj.m_type);
     ds << t;
-    ds << pad;
     ds << obj.m_matrix;
     return ds;
 }

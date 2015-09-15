@@ -1,8 +1,11 @@
 #include "RiaNetClient.h"
+#include "RiaNetCommand.h"
 #include "RiaCameraCommand.h"
+#include "RiaAnimationCommand.h"
 #include "RiaApplication.h"
 #include "RimView.h"
 #include "RiuViewer.h"
+#include "cafFrameAnimationControl.h"
 #include "cvfCamera.h"
 #include "cvfObject.h"
 #include "cvfMatrix4.h"
@@ -27,6 +30,8 @@ bool RiaNetClient::slotConnect(std::vector<QString> hosts)
 {
     cvf::Camera *cam = RiaApplication::instance()->activeReservoirView()->viewer()->mainCamera();
     connect(cam, SIGNAL(matrixChanged(cvf::Camera::MatrixType, const cvf::Mat4d&)), this, SLOT(slotMatrixChanged(cvf::Camera::MatrixType, const cvf::Mat4d&)));
+    caf::FrameAnimationControl *animationControl = RiaApplication::instance()->activeReservoirView()->viewer()->animationControl();
+    connect(animationControl, SIGNAL(changeFrame(int)), this, SLOT(slotFrameChanged(int)));
     bool success = true;
     for (std::vector<QString>::iterator it = hosts.begin(); it != hosts.end(); ++it)
     {
@@ -76,6 +81,26 @@ void RiaNetClient::slotMatrixChanged(cvf::Camera::MatrixType type, const cvf::Ma
     RiaCameraCommand comm(0, type, mat);
     QByteArray data;
     QDataStream stream(&data, QIODevice::ReadWrite);
+    stream << RiaNetCommand::CommandType::Camera;
+    stream << comm;
+
+    if (!slotWriteData(data))
+    {
+        qDebug() << "Sending data failed!";
+    }
+    else
+    {
+        qDebug() << "Send successful!";
+    }
+}
+
+void RiaNetClient::slotFrameChanged(int frameIndex)
+{
+    qDebug() << "Frame is now " << frameIndex;
+    RiaAnimationCommand comm(0, frameIndex);
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::ReadWrite);
+    stream << RiaNetCommand::CommandType::Animation;
     stream << comm;
 
     if (!slotWriteData(data))
